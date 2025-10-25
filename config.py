@@ -13,6 +13,8 @@ class Settings(BaseSettings):
         "https://localhost:8000",
         "http://localhost:5173",
         "https://localhost:5173",
+        "https://hyperlynx-frontend.vercel.app",
+        "https://hyperlynx-frontend-git-main-sujaanb.vercel.app"
     ]
 
     PROJECT_NAME: str = "Hyperlynx Platform APIs"
