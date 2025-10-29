@@ -23,3 +23,4 @@ fastapi                                      # Web framework for building APIs
 uvicorn                                      # ASGI server for FastAPI
 pydantic                                     # Data validation and settings management using Python type annotations
 pydantic-settings                            # Settings management for Pydantic
+python-multipart                             # Required for file uploads in FastAPI
