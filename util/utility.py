@@ -28,9 +28,10 @@ class Utility:
         Supported file types: .pdf, .docx, .txt, .csv, .xls, .xlsx.
         """
 
-        # Accept both absolute and relative paths. Do NOT strip a leading slash
-        # — absolute paths on Linux (e.g. /tmp/...) must be preserved so
-        # os.path.exists() can find them.
+        # Accept both absolute and relative paths. Resolve to an absolute
+        # filesystem path so checks and loaders work reliably on all OSes.
+        file_path = os.path.abspath(file_path)
+
         # Check if the file exists.
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"File not found: {file_path}")
