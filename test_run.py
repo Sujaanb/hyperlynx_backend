@@ -1,7 +1,6 @@
 from util.llm_factory import LLMFactory
 from util.system_prompt import prompt_generate_summary
-
-
+import re
 from typing import Optional
 
 def generate_summary(text: str, local_llm = False, document_content: Optional[str] = None) -> Optional[str]:
@@ -32,6 +31,13 @@ def generate_summary(text: str, local_llm = False, document_content: Optional[st
             local_llm=local_llm,
         )
         summary = response.content.strip()
+        
+        # Replace citation numbers with markdown links
+        if hasattr(response, 'additional_kwargs') and 'citations' in response.additional_kwargs:
+            citations = response.additional_kwargs['citations']
+            for i, citation in enumerate(citations, 1):
+                summary = re.sub(f'\[{i}\]', f'[{i}]({citation})', summary)
+        
         return summary
     except Exception as e:
         # Log the error appropriately

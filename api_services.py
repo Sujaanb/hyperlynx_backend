@@ -58,6 +58,12 @@ async def generate_content(
             local_llm=local_llm, 
             document_content=document_content
         )
+        
+        if summary is None:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to generate content. Please check your input and try again."
+            )
 
         return GenerateContentResponse(
             status="success", message="Content generated successfully", data=summary

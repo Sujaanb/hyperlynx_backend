@@ -15,6 +15,7 @@ black                                        # Code formatter
 unstructured                                 # Loads unstructured loaders from langchain
 networkx                                     # Required for using UnstructuredExcelLoader
 openpyxl                                     # Reads/writes Excel 2010 xlsx/xlsm/xltx/xltm files
+msoffcrypto-tool                             # Handles encrypted Microsoft Office files
 pandas                                       # Data manipulation and analysis library
 pypdf                                        # PDF toolkit for reading and manipulating PDF files
 python-docx                                  # Reads/writes Microsoft Word 2007/2010 docx files
@@ -24,3 +25,5 @@ uvicorn                                      # ASGI server for FastAPI
 pydantic                                     # Data validation and settings management using Python type annotations
 pydantic-settings                            # Settings management for Pydantic
 python-multipart                             # Required for file uploads in FastAPI
+deepagents                                   # Framework for building AI agents
+msoffcrypto-tool                             # Handles encrypted Microsoft Office files
