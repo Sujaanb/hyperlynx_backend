@@ -10,3 +10,6 @@ ENV/
 
 # Environment variables
 .env
+
+WARP.md
+.claude/settings.local.json
