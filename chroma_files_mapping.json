@@ -1,0 +1,79 @@
+[
+    {
+        "file_path": "compliance_documents\\CSF 2.0-Implementation_Examples.xlsx",
+        "file_name": "CSF 2.0-Implementation_Examples.xlsx",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc1",
+        "uploaded": 0
+    },
+    {
+        "file_path": "compliance_documents\\csf2.xlsx",
+        "file_name": "csf2.xlsx",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc2",
+        "uploaded": 0
+    },
+    {
+        "file_path": "compliance_documents\\dl_EU_Regulation_2022_2554.pdf",
+        "file_name": "dl_EU_Regulation_2022_2554.pdf",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc3",
+        "uploaded": 1
+    },
+    {
+        "file_path": "compliance_documents\\DORA Compliance Checklist by Memcyco (1).xlsx",
+        "file_name": "DORA Compliance Checklist by Memcyco (1).xlsx",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc4",
+        "uploaded": 1
+    },
+    {
+        "file_path": "compliance_documents\\ENISA_Technical_Implementation_Guidance_Mapping_table_version_1.2.xlsx",
+        "file_name": "ENISA_Technical_Implementation_Guidance_Mapping_table_version_1.2.xlsx",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc5",
+        "uploaded": 0
+    },
+    {
+        "file_path": "compliance_documents\\infSecPol.pdf",
+        "file_name": "infSecPol.pdf",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc6",
+        "uploaded": 1
+    },
+    {
+        "file_path": "compliance_documents\\ps621.pdf",
+        "file_name": "ps621.pdf",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc7",
+        "uploaded": 1
+    },
+    {
+        "file_path": "compliance_documents\\Sb_2025_410_PZZ.pdf",
+        "file_name": "Sb_2025_410_PZZ.pdf",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc8",
+        "uploaded": 1
+    },
+    {
+        "file_path": "compliance_documents\\ss121-march-22.pdf",
+        "file_name": "ss121-march-22.pdf",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc9",
+        "uploaded": 1
+    },
+    {
+        "file_path": "compliance_documents\\ss221-november-2024-update.pdf",
+        "file_name": "ss221-november-2024-update.pdf",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc10",
+        "uploaded": 1
+    },
+    {
+        "file_path": "compliance_documents\\UK_Corporate_Governance_Code_2024_a2hmQmY.pdf",
+        "file_name": "UK_Corporate_Governance_Code_2024_a2hmQmY.pdf",
+        "chroma_collection_name": "compliance_collection",
+        "doc_id": "Doc11",
+        "uploaded": 1
+    }
+]

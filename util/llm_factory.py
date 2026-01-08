@@ -1,7 +1,7 @@
 import os
 import sys
 from dotenv import load_dotenv
-
+import re
 root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(root_dir)
 
@@ -17,6 +17,7 @@ from langchain_core.prompts import (
     SystemMessagePromptTemplate,
     HumanMessagePromptTemplate,
 )
+from langchain_openai import OpenAIEmbeddings
 
 import util.constants as constants
 
@@ -134,3 +135,38 @@ class LLMFactory:
 
         else:
             raise ValueError("At least a human_message must be provided.")
+        
+    @staticmethod    
+    def web_search (query):
+        """
+            Args:
+                query: The search query
+            Returns:
+                Response of the API in markdown format along with embedded links.
+            Function:
+                Performs a search using the Perplexity API and returns the response or error message.
+        """
+        api_key = os.getenv("perplexity_api_key")
+        llm = ChatPerplexity(
+            api_key=api_key, model=constants.perplexity_llm, temperature=0
+        )
+        response = llm.invoke(query)
+        response_content = response.content.strip()
+
+        # Replace citation numbers with markdown links
+        if hasattr(response, 'additional_kwargs') and 'citations' in response.additional_kwargs:
+            citations = response.additional_kwargs['citations']
+            for i, citation in enumerate(citations, 1):
+                response_content = re.sub(f'\[{i}\]', f'[{i}]({citation})', response_content)
+
+        return response_content
+    
+    @staticmethod
+    def get_openai_embeddings():
+        """
+        Returns the OpenAI embedding model.
+        """
+        load_dotenv(override=True)
+        api_key = os.getenv("openai_api_key")
+
+        return OpenAIEmbeddings(model=constants.openai_embedding_model, openai_api_key=api_key)
