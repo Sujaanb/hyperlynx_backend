@@ -64,9 +64,9 @@ class RAGService:
         """
         from langchain_openai import OpenAIEmbeddings
         
-        openai_api_key = os.getenv("OPENAI_API_KEY")
+        openai_api_key = os.getenv("openai_api_key")
         if not openai_api_key:
-            raise ValueError("OPENAI_API_KEY not found in environment variables")
+            raise ValueError("openai_api_key not found in environment variables")
         
         self.embeddings = OpenAIEmbeddings(
             openai_api_key=openai_api_key,
