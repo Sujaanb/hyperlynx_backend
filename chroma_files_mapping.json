@@ -4,14 +4,14 @@
         "file_name": "CSF 2.0-Implementation_Examples.xlsx",
         "chroma_collection_name": "compliance_collection",
         "doc_id": "Doc1",
-        "uploaded": 0
+        "uploaded": 1
     },
     {
         "file_path": "compliance_documents\\csf2.xlsx",
         "file_name": "csf2.xlsx",
         "chroma_collection_name": "compliance_collection",
         "doc_id": "Doc2",
-        "uploaded": 0
+        "uploaded": 1
     },
     {
         "file_path": "compliance_documents\\dl_EU_Regulation_2022_2554.pdf",
@@ -32,7 +32,7 @@
         "file_name": "ENISA_Technical_Implementation_Guidance_Mapping_table_version_1.2.xlsx",
         "chroma_collection_name": "compliance_collection",
         "doc_id": "Doc5",
-        "uploaded": 0
+        "uploaded": 1
     },
     {
         "file_path": "compliance_documents\\infSecPol.pdf",

@@ -17,10 +17,9 @@ load_dotenv()
 class ChromaUploader:
     def __init__(self):
         """
-        Initialize the Chroma uploader with embeddings (HuggingFace or OpenAI) and Chroma client.
+        Initialize the Chroma uploader with OpenAI embeddings and Chroma client.
         """
         # Get configuration from environment
-        self.embedding_provider = os.getenv("EMBEDDING_PROVIDER", "huggingface").lower()
         self.chroma_api_key = os.getenv("CHROMA_API_KEY")
         self.chroma_tenant = os.getenv("CHROMA_TENANT")
         self.chroma_database = os.getenv("CHROMA_DATABASE")
@@ -35,48 +34,20 @@ class ChromaUploader:
     
     def _init_embeddings(self):
         """
-        Initialize embeddings based on the selected provider (HuggingFace or OpenAI).
+        Initialize OpenAI embeddings.
         """
-        if self.embedding_provider == "openai":
-            print("Using OpenAI embeddings...")
-            from langchain_openai import OpenAIEmbeddings
-            
-            openai_api_key = os.getenv("OPENAI_API_KEY")
-            if not openai_api_key:
-                raise ValueError("OPENAI_API_KEY not found in environment variables")
-            
-            self.embeddings = OpenAIEmbeddings(
-                openai_api_key=openai_api_key,
-                model=os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
-            )
-            print(f"✓ Loaded OpenAI embeddings: {os.getenv('OPENAI_EMBEDDING_MODEL', 'text-embedding-3-small')}")
-            
-        elif self.embedding_provider == "huggingface":
-            print("Using HuggingFace embeddings (free)...")
-            from langchain_huggingface import HuggingFaceEmbeddings
-            
-            # Use a good free model from HuggingFace
-            model_name = os.getenv(
-                "HUGGINGFACE_EMBEDDING_MODEL", 
-                "sentence-transformers/all-MiniLM-L6-v2"
-            )
-            
-            # Optional: Use GPU if available
-            device = os.getenv("EMBEDDING_DEVICE", "cpu")
-            
-            self.embeddings = HuggingFaceEmbeddings(
-                model_name=model_name,
-                model_kwargs={'device': device},
-                encode_kwargs={'normalize_embeddings': True}
-            )
-            print(f"✓ Loaded HuggingFace embeddings: {model_name}")
-            print(f"  Device: {device}")
-            
-        else:
-            raise ValueError(
-                f"Unknown embedding provider: {self.embedding_provider}. "
-                "Supported providers: 'openai', 'huggingface'"
-            )
+        print("Using OpenAI embeddings...")
+        from langchain_openai import OpenAIEmbeddings
+        
+        openai_api_key = os.getenv("OPENAI_API_KEY")
+        if not openai_api_key:
+            raise ValueError("OPENAI_API_KEY not found in environment variables")
+        
+        self.embeddings = OpenAIEmbeddings(
+            openai_api_key=openai_api_key,
+            model=os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
+        )
+        print(f"✓ Loaded OpenAI embeddings: {os.getenv('OPENAI_EMBEDDING_MODEL', 'text-embedding-3-small')}")
     
     def _init_chroma_client(self):
         """
@@ -129,13 +100,22 @@ class ChromaUploader:
             
             # Read the document using the Utility class
             print(f"  Reading document from: {file_path}")
-            documents = Utility.read_file_content(file_path)
+            raw_documents = Utility.read_file_content(file_path)
             
-            if not documents:
+            if not raw_documents:
                 print(f"  Warning: No content extracted from {file_name}")
                 return False
             
-            print(f"  Extracted {len(documents)} page(s)/chunk(s)")
+            # Split documents into smaller chunks to avoid request size limits (16KB quota)
+            from langchain_text_splitters import RecursiveCharacterTextSplitter
+            text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=1000,
+                chunk_overlap=200,
+                length_function=len,
+            )
+            documents = text_splitter.split_documents(raw_documents)
+            
+            print(f"  Extracted {len(raw_documents)} raw page(s), split into {len(documents)} chunk(s)")
             
             # Add metadata to each document
             for doc in documents:
@@ -159,9 +139,17 @@ class ChromaUploader:
             ids = [f"{doc_id}_chunk_{i}" for i in range(len(documents))]
             
             # Add documents to the collection
-            vectorstore.add_documents(documents=documents, ids=ids)
+            # Process in batches to be safe
+            batch_size = 10
+            total_batches = (len(documents) + batch_size - 1) // batch_size
             
-            print(f"  ✓ Successfully uploaded {file_name} to {collection_name}")
+            for i in range(0, len(documents), batch_size):
+                batch_docs = documents[i:i+batch_size]
+                batch_ids = ids[i:i+batch_size]
+                vectorstore.add_documents(documents=batch_docs, ids=batch_ids)
+                print(f"    Uploaded batch {i//batch_size + 1}/{total_batches}", end='\r')
+            
+            print(f"\n  ✓ Successfully uploaded {file_name} to {collection_name}")
             return True
             
         except Exception as e:

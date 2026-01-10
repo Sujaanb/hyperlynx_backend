@@ -33,18 +33,16 @@ class RAGService:
     and uses non-persistent (in-memory) vectorization for uploaded user documents.
     """
     
-    # Collection name matching what's used in upload_documents.py
     COLLECTION_NAME = "compliance_collection"
     
     def __init__(self):
         """
         Initialize the RAG service with embeddings and Chroma client.
         """
-        self.embedding_provider = os.getenv("EMBEDDING_PROVIDER", "huggingface").lower()
         self.chroma_api_key = os.getenv("CHROMA_API_KEY")
         self.chroma_tenant = os.getenv("CHROMA_TENANT")
         self.chroma_database = os.getenv("CHROMA_DATABASE")
-        
+            
         # Initialize embeddings
         self._init_embeddings()
         
@@ -58,42 +56,23 @@ class RAGService:
             length_function=len,
         )
         
-        logger.info("RAG Service initialized successfully")
+        logger.info(f"RAG Service initialized successfully (Collection: {self.COLLECTION_NAME})")
     
     def _init_embeddings(self):
         """
-        Initialize embeddings based on the selected provider.
+        Initialize OpenAI embeddings.
         """
-        if self.embedding_provider == "openai":
-            from langchain_openai import OpenAIEmbeddings
-            
-            openai_api_key = os.getenv("OPENAI_API_KEY")
-            if not openai_api_key:
-                raise ValueError("OPENAI_API_KEY not found in environment variables")
-            
-            self.embeddings = OpenAIEmbeddings(
-                openai_api_key=openai_api_key,
-                model=os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
-            )
-            logger.info(f"Using OpenAI embeddings: {os.getenv('OPENAI_EMBEDDING_MODEL', 'text-embedding-3-small')}")
-            
-        elif self.embedding_provider == "huggingface":
-            from langchain_huggingface import HuggingFaceEmbeddings
-            
-            model_name = os.getenv(
-                "HUGGINGFACE_EMBEDDING_MODEL", 
-                "sentence-transformers/all-MiniLM-L6-v2"
-            )
-            device = os.getenv("EMBEDDING_DEVICE", "cpu")
-            
-            self.embeddings = HuggingFaceEmbeddings(
-                model_name=model_name,
-                model_kwargs={'device': device},
-                encode_kwargs={'normalize_embeddings': True}
-            )
-            logger.info(f"Using HuggingFace embeddings: {model_name} on {device}")
-        else:
-            raise ValueError(f"Unknown embedding provider: {self.embedding_provider}")
+        from langchain_openai import OpenAIEmbeddings
+        
+        openai_api_key = os.getenv("OPENAI_API_KEY")
+        if not openai_api_key:
+            raise ValueError("OPENAI_API_KEY not found in environment variables")
+        
+        self.embeddings = OpenAIEmbeddings(
+            openai_api_key=openai_api_key,
+            model=os.getenv("OPENAI_EMBEDDING_MODEL", "text-embedding-3-small")
+        )
+        logger.info(f"Using OpenAI embeddings: {os.getenv('OPENAI_EMBEDDING_MODEL', 'text-embedding-3-small')}")
     
     def _init_chroma_client(self):
         """
