@@ -157,7 +157,7 @@ class LLMFactory:
         if hasattr(response, 'additional_kwargs') and 'citations' in response.additional_kwargs:
             citations = response.additional_kwargs['citations']
             for i, citation in enumerate(citations, 1):
-                response_content = re.sub(f'\[{i}\]', f'[{i}]({citation})', response_content)
+                response_content = re.sub(rf'\[{i}\]', f'[{i}]({citation})', response_content)
 
         return response_content
     
