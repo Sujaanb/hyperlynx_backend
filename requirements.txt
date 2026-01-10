@@ -30,3 +30,5 @@ msoffcrypto-tool                             # Handles encrypted Microsoft Offic
 langchain-huggingface 
 sentence_transformers
 langchain-chroma
+langchain-text-splitters
+xlrd
